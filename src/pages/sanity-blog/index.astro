@@ -7,11 +7,12 @@ import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import { sanityClient } from "sanity:client";
+import type { BlogPost } from '../../Sanity';
 
 // const posts = (await getCollection('blog')).sort(
 // 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 // );
-const fetchProjects = await sanityClient.fetch(`*[_type=='blogPost'] | order(_createdAt desc)`)
+const fetchProjects: BlogPost[] = await sanityClient.fetch(`*[_type=='blogPost'] | order(_createdAt desc)`)
 
 ---
 
