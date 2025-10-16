@@ -1,0 +1,41 @@
+---
+import { marked } from 'marked';
+import { sanityClient } from "sanity:client";
+
+export async function getStaticPaths() {
+  const posts = await sanityClient.fetch(`*[_type == "blogPost"] | order(_createdAt desc)`);
+  console.log('posts',posts);
+  return posts.map((post) => ({
+    params: { slug: post._id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+const htmlContent = marked.parse(post.mdxContent || '');
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{post.title}</title>
+		<!-- Add other head elements like BaseHead if needed -->
+	</head>
+	<body>
+		<!-- Add Header if needed -->
+		<main>
+			<article>
+				<h1>{post.title}</h1>
+				<time datetime={post._createdAt}>{post._createdAt}</time>
+				<div set:html={htmlContent} />
+			</article>
+		</main>
+		<!-- Add Footer if needed -->
+	</body>
+</html>

@@ -3,6 +3,11 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { sanityClient } from "sanity:client";
+
+const fetchProjects = await sanityClient.fetch(`*[_type=='blogPost'] | order(_createdAt desc)`)
+
+console.log('fetchProjects',fetchProjects);
 ---
 
 <!doctype html>
@@ -14,6 +19,17 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		<Header />
 		<main>
 			<h1>🧑‍🚀 Hello, Astronaut!</h1>
+			<ul class="flex flex-col gap-y-4">
+				{fetchProjects.map((post: any) => (
+					<li class="hover:underline">
+					<a href={`/posts/${post.slug.current}`}>
+						<h2 class="text-xl font-semibold">{post.title}</h2>
+						<h4 class="text-xl font-semibold">{post.author}</h4>
+						<p>{new Date(post._updatedAt).toLocaleDateString()}</p>
+					</a>
+					</li>
+				))}
+			</ul>
 			<p>
 				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
 				template serves as a lightweight, minimally-styled starting point for anyone looking to build
