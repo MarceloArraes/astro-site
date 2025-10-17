@@ -13,7 +13,7 @@ import type { BlogPost } from '../../Sanity';
 // 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 // );
 const fetchProjects: BlogPost[] = await sanityClient.fetch(`*[_type=='blogPost'] | order(_createdAt desc)`)
-
+console.log('fetchProjects', fetchProjects);
 ---
 
 <!doctype html>
@@ -96,7 +96,7 @@ const fetchProjects: BlogPost[] = await sanityClient.fetch(`*[_type=='blogPost']
 			<section>
 				<ul>
 					{
-						fetchProjects.map((post: any) => (
+						fetchProjects.map((post: BlogPost) => (
 							<li>
 								<a href={`/sanity-blog/${post._id}/`}>
 									{/* {post.data.heroImage && (
@@ -104,7 +104,7 @@ const fetchProjects: BlogPost[] = await sanityClient.fetch(`*[_type=='blogPost']
 									)} */}
 									<h4 class="title">{post.title}</h4>
 									<p class="date">
-										{/* <FormattedDate date={post._createdAt} /> */}
+										<FormattedDate date={new Date(post._createdAt)} /> 
 									</p>
 								</a>
 							</li>
