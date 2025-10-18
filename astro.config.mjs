@@ -11,7 +11,7 @@ import react from '@astrojs/react';
 export default defineConfig({
     site: 'https://example.com',
     integrations: [mdx(), sitemap(), sanity({
-         projectId: '4hfzjbz1',
+         projectId: import.meta.env.VITE_SECRET_PASSWORD,
       dataset: 'production',
       // Set useCdn to false if you're building statically.
       useCdn: false,

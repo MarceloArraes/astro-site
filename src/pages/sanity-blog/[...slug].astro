@@ -2,6 +2,9 @@
 import { marked } from 'marked';
 import { sanityClient } from "sanity:client";
 import type { BlogPost } from '../../Sanity';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 export async function getStaticPaths() {
   const posts = await sanityClient.fetch(`*[_type == "blogPost"] | order(_createdAt desc)`);
@@ -26,12 +29,14 @@ const htmlContent = marked.parse(post.mdxContent || '');
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{post.title}</title>
-		<!-- Add other head elements like BaseHead if needed -->
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		
 	</head>
 	<body>
-		<!-- Add Header if needed -->
+		<Header />
+		 
 		<main>
-			<article>
+			<article >
 				<h1>{post.title}</h1>
 				<time datetime={post._createdAt}>{post._createdAt}</time>
 				<div set:html={htmlContent} />
