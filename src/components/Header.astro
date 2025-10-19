@@ -11,15 +11,25 @@ import HeaderLink from './HeaderLink.astro';
 			<p class="right-corner-text">latest post or something in very small letters</p>
 		</div>
 		<p class="separator"></p>
-		<div class="" style="font-family: Honk;">
+		<div class="nav-links" style="font-family: Honk;">
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/sanity-blog">Blog</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
+
 		</div>
 
 	</nav>
 </header>
 <style>
+	@keyframes links-sliding {
+	0% { transform: translateX(-54dvw) }
+	100% {transform: translateX(54dvw) }
+	}
+	.nav-links {
+		font-size: 30px;
+		/* transform: translateX(50dvw) */
+		/* animation: links-sliding 15s linear infinite */
+	}
 	.right-corner-text {
 		grid-area: 1 / 5 / 2 / 6;
 	}
