@@ -1,43 +1,45 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import { sanityClient } from "sanity:client";
-import type { BlogPost } from '../Sanity';
+import type { BlogPost } from "../Sanity";
 
-const fetchProjects = await sanityClient.fetch(`*[_type=='blogPost'] | order(_createdAt desc)`)
+const fetchProjects = await sanityClient.fetch(
+	`*[_type=='blogPost'] | order(_createdAt desc)`,
+);
 
-console.log('fetchProjects',fetchProjects);
+console.log("fetchProjects", fetchProjects);
 ---
+
 <!-- 
 .div2 { grid-area: 1 / 1 / 2 / 2; }
 .div3 { grid-area: 1 / 2 / 2 / 3; }
 .div4 { grid-area: 1 / 3 / 2 / 4; }
--->
-<!doctype html>
+--><!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			@keyframes decoration-slide {
+			/* @keyframes decoration-slide {
 			0% {underl }
 			100% {text-decoration-color: var(--black) }
-			}
+			} */
 			h4 {
-				background: linear-gradient(currentColor 0 0) bottom left/var(--underline-width, 0%) 0.1em no-repeat;
+				background: linear-gradient(currentColor 0 0) bottom
+					left/var(--underline-width, 0%) 0.1em no-repeat;
 				transition: background-size 0.5s;
 			}
 			.list-for-posts {
 				display: grid;
 				grid-template-columns: 1fr 1fr 1fr;
-					justify-content: center;
+				justify-content: center;
 				padding: 10px;
 				row-gap: 5px;
 				column-gap: 5px;
 			}
 			.front-page-posts {
-				/* grid-area: 1 / 1 / 2 / 2; */
 				text-decoration: none;
 				border: 1px solid black;
 				padding: 10px;
@@ -47,8 +49,6 @@ console.log('fetchProjects',fetchProjects);
 			.front-page-posts:hover {
 				/* color: red; */
 				--underline-width: 100%;
-				/* text-decoration: underline !important;; */
-				animation: decoration-slide 2s linear !important;
 			}
 		</style>
 	</head>
@@ -56,40 +56,39 @@ console.log('fetchProjects',fetchProjects);
 		<Header />
 
 		<main>
-			<p>
-				Welcome to my personal open journal
-			</p>
-			<p>
-				something
-			</p>
+			<p>Welcome to my personal open journal</p>
+			<p>something</p>
 			<p>asdasd: daasdsda</p>
 			<ul>
 				<li>lemon squeezi</li>
 				<li>asdasds <code>codess</code></li>
-				<li> <code></code></li>
-				
+				<li><code></code></li>
 			</ul>
-			<p>
-				
-			</p>
-			<p>
-			
-			</p>	
+			<p></p>
+			<p></p>
 			<!-- style="font-family: 'Lugrasimo';" -->
-			<div class="flex flex-col gap-y-4" >
+			<div class="flex flex-col gap-y-4">
 				<div class="list-for-posts">
-				{fetchProjects.map((post: BlogPost) => (
-						<a class="front-page-posts" href={`/posts/${post.slug?.current}`}>
-						<div style="display: flex; flex-direction: column;">
-							<h4 >{post.title}</h4>
-							<p >{post.author}</p>
-							<p>{new Date(post._updatedAt).toLocaleDateString()}</p>
-							</div>
-						</a>
-				))}
+					{
+						fetchProjects.map((post: BlogPost) => (
+							<a
+								class="front-page-posts"
+								href={`/posts/${post.slug?.current}`}
+							>
+								<div style="display: flex; flex-direction: column;">
+									<h4>{post.title}</h4>
+									<p>{post.author}</p>
+									<p>
+										{new Date(
+											post._updatedAt,
+										).toLocaleDateString()}
+									</p>
+								</div>
+							</a>
+						))
+					}
 				</div>
 			</div>
-			
 		</main>
 		<Footer />
 	</body>
