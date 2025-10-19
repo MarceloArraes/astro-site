@@ -4,6 +4,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { sanityClient } from "sanity:client";
+import type { BlogPost } from '../Sanity';
 
 const fetchProjects = await sanityClient.fetch(`*[_type=='blogPost'] | order(_createdAt desc)`)
 
@@ -17,28 +18,18 @@ console.log('fetchProjects',fetchProjects);
 	</head>
 	<body>
 		<Header />
+
 		<main>
-			<h1>🧑‍🚀 Hello, Marcelo!</h1>
-			<ul class="flex flex-col gap-y-4">
-				{fetchProjects.map((post: any) => (
-					<li class="hover:underline">
-					<a href={`/posts/${post.slug.current}`}>
-						<h2 class="text-xl font-semibold">{post.title}</h2>
-						<h4 class="text-xl font-semibold">{post.author}</h4>
-						<p>{new Date(post._updatedAt).toLocaleDateString()}</p>
-					</a>
-					</li>
-				))}
-			</ul>
 			<p>
-				Welcome to the official 
+				Welcome to my personal open journal
 			</p>
 			<p>
-				
+				something
 			</p>
-			<p>:</p>
+			<p>asdasd: daasdsda</p>
 			<ul>
-				<li> <code></code></li>
+				<li>lemon squeezi</li>
+				<li>asdasds <code>codess</code></li>
 				<li> <code></code></li>
 				
 			</ul>
@@ -47,7 +38,19 @@ console.log('fetchProjects',fetchProjects);
 			</p>
 			<p>
 			
-			</p>
+			</p>	
+			<ul class="flex flex-col gap-y-4">
+				{fetchProjects.map((post: BlogPost) => (
+					<li class="hover:underline">
+					<a href={`/posts/${post.slug?.current}`}>
+						<h2 class="text-xl font-semibold">{post.title}</h2>
+						<p class="text-sm font-semibold">{post.author}</p>
+						<p>{new Date(post._updatedAt).toLocaleDateString()}</p>
+					</a>
+					</li>
+				))}
+			</ul>
+			
 		</main>
 		<Footer />
 	</body>

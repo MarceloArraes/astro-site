@@ -1,4 +1,6 @@
-import type { Slug } from "sanity"
+// import type { Slug } from "sanity"
+
+export type Slug = { _type: string, current: string }
 
 export type BlogPost = {
   _id: string
