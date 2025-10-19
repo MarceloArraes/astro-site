@@ -18,11 +18,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: downcase REPO
+        id: lowercase-repo
         run: |
-         echo "REPO=${GITHUB_REPOSITORY@L}" >> "${GITHUB_ENV}"
+         echo "REPO=${GITHUB_REPOSITORY@L}" >> "$GITHUB_OUTPUT"
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ghcr.io/"$REPO":latest
+          tags: ghcr.io/${{steps.lowercase-repo.outputs.REPO}}:latest
