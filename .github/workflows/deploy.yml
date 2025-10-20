@@ -28,4 +28,4 @@ jobs:
           push: true
           tags: ghcr.io/${{steps.lowercase-repo.outputs.REPO}}:latest
           build-args: |
-            VITE_SANITY_PROJECT_ID=${{ secrets.SANITY_PROJECT_ID }}
+            VITE_SANITY_PROJECT_ID=${{ secrets.VITE_SANITY_PROJECT_ID }}
