@@ -1,0 +1,109 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+
+// src/pages/dashboard.astro
+
+const serverIpOrHostname = "http://10.0.0.79";
+
+// I've extracted all the services with a web interface from your docker ps output.
+const services = [
+    { name: "Astro site", port: 4690, description: "Marcelo Blog" },
+    { name: "qBittorrent", port: 8081, description: "Torrent client" },
+    { name: "Jackett", port: 9117, description: "API for torrent trackers" },
+    { name: "Radarr", port: 7878, description: "Movie collection manager" },
+    { name: "Ombi", port: 3579, description: "Media request system" },
+    { name: "Sonarr", port: 8989, description: "TV series manager" },
+    { name: "Coolify", port: 8000, description: "Self-hosting platform" },
+    { name: "Appsmith", port: 85, description: "Low-code app builder" },
+    { name: "n8n", port: 5678, description: "Workflow automation" },
+    { name: "Evolution API", port: 8080, description: "WhatsApp API" },
+    {
+        name: "Maybe Finance",
+        port: 3000,
+        description: "Personal finance tracker",
+    },
+    { name: "Jellyfin", port: 8096, description: "Media server" },
+    { name: "Deluge", port: 8112, description: "Torrent client" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <BaseHead
+            title="My Services"
+            description="A dashboard for my self-hosted services."
+        />
+        <style>
+            .services-grid {
+                display: grid;
+                /* This will create a responsive grid that fits as many columns as possible */
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .service-card {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                text-decoration: none;
+                color: inherit;
+                border: 1px solid black;
+                border-radius: 8px;
+                padding: 1.5rem;
+                transition:
+                    transform 0.2s ease-in-out,
+                    box-shadow 0.2s ease-in-out;
+            }
+            .service-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+            .service-card h3 {
+                margin: 0 0 0.5rem 0;
+                font-size: 1.5rem;
+            }
+            .service-card .port {
+                font-family: monospace;
+                font-size: 0.9rem;
+                color: #555;
+                margin-bottom: 0.75rem;
+            }
+            .service-card .description {
+                font-size: 1rem;
+                color: #333;
+            }
+        </style>
+    </head>
+    <body>
+        <Header />
+        <main>
+            <h1>Services Dashboard</h1>
+            <p>
+                A quick-access launchpad for all running applications on my
+                server.
+            </p>
+
+            <div class="services-grid">
+                {
+                    services.map((service) => (
+                        <a
+                            class="service-card"
+                            href={`${serverIpOrHostname}:${service.port}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <h3>{service.name}</h3>
+                            <p class="port">Port: {service.port}</p>
+                            <p class="description">{service.description}</p>
+                        </a>
+                    ))
+                }
+            </div>
+        </main>
+        <Footer />
+    </body>
+</html>
