@@ -12,6 +12,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+ARG SANITY_PROJECT_ID
+ENV SANITY_PROJECT_ID=$SANITY_PROJECT_ID
 # Build Astro project
 RUN npm run build
 
