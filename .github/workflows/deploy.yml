@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # This is required for actions/checkout
+      packages: write # This is required to push to ghcr.io
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
