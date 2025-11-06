@@ -5,12 +5,21 @@ import Header from "../components/Header.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import { sanityClient } from "sanity:client";
 import type { BlogPost } from "../Sanity";
+import { getCollection } from "astro:content";
+import BlogPostInternal from "../layouts/BlogPost.astro";
+import { render } from "astro:content";
 
 const fetchProjects = await sanityClient.fetch(
-	`*[_type=='blogPost'] | order(_createdAt desc)`,
+	`*[_type=='blogPost'] | order(_createdAt desc)[0..5]`,
 );
 
-console.log("fetchProjects", fetchProjects);
+const post = (await getCollection("blog")).filter(
+	(post) => post.id == "welcomepost",
+)[0];
+
+console.log("first posts", post);
+const { Content } = await render(post);
+// console.log("fetchProjects", fetchProjects);
 ---
 
 <!-- 
@@ -53,6 +62,8 @@ console.log("fetchProjects", fetchProjects);
 				row-gap: 5px;
 				column-gap: 5px;
 			}
+			.front-page-body {
+			}
 			.front-page-posts {
 				text-decoration: none;
 				border: 1px solid black;
@@ -60,24 +71,23 @@ console.log("fetchProjects", fetchProjects);
 				font-size: 20px;
 				text-align: center;
 			}
+			.welcomepost {
+				width: 1080px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 3em 1em;
+			}
 		</style>
 	</head>
 	<body>
 		<Header />
 
 		<main>
-			<p>Welcome to my personal open journal</p>
-			<p>something</p>
-			<p>asdasd: daasdsda</p>
-			<ul>
-				<li>lemon squeezi</li>
-				<li>asdasds <code>codess</code></li>
-				<li><code></code></li>
-			</ul>
-			<p></p>
-			<p></p>
+			<div class="welcomepost">
+				<Content />
+			</div>
 			<!-- style="font-family: 'Lugrasimo';" -->
-			<div class="flex flex-col gap-y-4">
+			<div class="">
 				<div class="list-for-posts">
 					{
 						fetchProjects.map((post: BlogPost) => (
