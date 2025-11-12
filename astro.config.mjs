@@ -9,7 +9,7 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://example.com',
+    site: 'https://astro.ordotech.space',
     integrations: [mdx(), sitemap(), sanity({
          projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
       dataset: 'production',
