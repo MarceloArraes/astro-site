@@ -1,4 +1,4 @@
-# Stage 1 — Build
+# ---- Stage 1: Build the Astro site (This stage is perfect, no changes needed) ----
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -6,32 +6,30 @@ WORKDIR /app
 # Copy dependency files
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies using 'ci' for reproducible builds
 RUN npm ci
 
-# Copy source code
+# Copy the rest of the source code
 COPY . .
 
+# Pass in build-time secrets/arguments if needed
 ARG VITE_SANITY_PROJECT_ID
 ENV VITE_SANITY_PROJECT_ID=${VITE_SANITY_PROJECT_ID}
 
-# Build Astro project
+# Build the static site into the /app/dist directory
 RUN npm run build
 
-# Stage 2 — Serve (lightweight image)
-FROM node:20-alpine AS runner
+# ---- Stage 2: Serve the static files with Nginx (The Production Stage) ----
+FROM nginx:stable-alpine
 
-WORKDIR /app
+# Remove the default Nginx welcome page
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy built site
-COPY --from=builder /app/dist ./dist
-COPY package*.json ./
+# Copy the built static files from the 'builder' stage into the Nginx webroot
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Install only production dependencies (Astro preview needs a few)
-RUN npm ci --omit=dev
+# Expose port 80 (the default Nginx port)
+EXPOSE 80
 
-# Expose the default preview port
-EXPOSE 4321
-
-# Start Astro preview (serves static files)
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
+# The default Nginx command will start the server automatically.
+# CMD ["nginx", "-g", "daemon off;"] is the default and does not need to be specified.
