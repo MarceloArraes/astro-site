@@ -41,4 +41,4 @@ jobs:
             VITE_SANITY_PROJECT_ID=${{ secrets.VITE_SANITY_PROJECT_ID }}
 
       - name: Trigger Coolify Redeployment
-        run: curl --fail -X POST -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" ${{ secrets.COOLIFY_DEPLOYMENT_HOOK }}
+        run: 'curl --fail -X POST -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" ${{ secrets.COOLIFY_DEPLOYMENT_HOOK }}'
