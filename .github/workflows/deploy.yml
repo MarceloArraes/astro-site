@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   repository_dispatch: 
     types: [ sanity-update ] 
+  workflow_dispatch: 
 
 jobs:
   build:
@@ -22,15 +23,22 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: downcase REPO
         id: lowercase-repo
         run: |
          echo "REPO=${GITHUB_REPOSITORY@L}" >> "$GITHUB_OUTPUT"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ghcr.io/${{steps.lowercase-repo.outputs.REPO}}:latest
+          tags: 
+            ghcr.io/${{steps.lowercase-repo.outputs.REPO}}:latest
+            ghcr.io/${{steps.lowercase-repo.outputs.REPO}}:${{ github.sha }}
           build-args: |
             VITE_SANITY_PROJECT_ID=${{ secrets.VITE_SANITY_PROJECT_ID }}
+
+      - name: Trigger Coolify Redeployment
+        run: curl --fail -X POST -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" ${{ secrets.COOLIFY_DEPLOYMENT_HOOK }}
