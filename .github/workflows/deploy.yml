@@ -2,14 +2,16 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ main ]  
+    branches: [ main ]
+  repository_dispatch: 
+    types: [ sanity-update ] 
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read  # This is required for actions/checkout
-      packages: write # This is required to push to ghcr.io
+      contents: read  
+      packages: write 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
