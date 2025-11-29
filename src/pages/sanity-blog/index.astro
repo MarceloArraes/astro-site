@@ -1,19 +1,18 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import Header from "../../components/Header.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
 import { sanityClient } from "sanity:client";
-import type { BlogPost } from '../../Sanity';
+import type { BlogPost } from "../../Sanity";
 
-// const posts = (await getCollection('blog')).sort(
-// 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-// );
-const fetchProjects: BlogPost[] = await sanityClient.fetch(`*[_type=='blogPost'] | order(_createdAt desc)`)
-console.log('fetchProjects', fetchProjects);
+const fetchProjects: BlogPost[] = await sanityClient.fetch(
+	`*[_type=='blogPost'] | order(_createdAt desc)[0..14]`,
+);
+console.log("fetchProjects", fetchProjects);
 ---
 
 <!doctype html>
@@ -24,12 +23,18 @@ console.log('fetchProjects', fetchProjects);
 			main {
 				width: 960px;
 			}
+			section {
+				width: 100vw;
+				display: flex;
+				justify-content: space-evenly;
+			}
 			ul {
 				display: flex;
 				flex-wrap: wrap;
 				gap: 2rem;
 				list-style-type: none;
 				margin: 0;
+				margin-left: 20px;
 				padding: 0;
 			}
 			ul li {
@@ -41,7 +46,8 @@ console.log('fetchProjects', fetchProjects);
 			}
 			ul li:first-child {
 				width: 100%;
-				margin-bottom: 1rem;
+				margin-bottom: 2rem;
+				margin-top: 2rem;
 				text-align: center;
 			}
 			ul li:first-child img {
@@ -104,7 +110,9 @@ console.log('fetchProjects', fetchProjects);
 									)} */}
 									<h4 class="title">{post.title}</h4>
 									<p class="date">
-										<FormattedDate date={new Date(post._createdAt)} /> 
+										<FormattedDate
+											date={new Date(post._createdAt)}
+										/>
 									</p>
 								</a>
 							</li>

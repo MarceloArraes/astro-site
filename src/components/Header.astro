@@ -1,26 +1,33 @@
 ---
 import { SITE_TITLE } from "../consts";
 import HeaderLink from "./HeaderLink.astro";
+
+const dateToday = new Date().toLocaleDateString("en-Au");
+console.log("dateToday", dateToday);
 ---
 
 <header>
 	<nav>
 		<div class="nav-title">
-			<p class="date-today">date today (?)</p>
+			<p class="date-today">{dateToday}</p>
 			<h1 class="title-header"><a href="/">{SITE_TITLE}</a></h1>
-			<p class="right-corner-text">
-				latest post or something in very small letters
-			</p>
-		</div>
-		<p class="separator"></p>
-		<div class="nav-links" style="font-family: Honk;">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/sanity-blog">Blog</HeaderLink>
-			<HeaderLink href="/server-links">Server</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+			<img
+				class="right-corner-text"
+				height="100"
+				width="100"
+				src="src/assets/newtonCraddle.svg"
+			/>
 		</div>
 	</nav>
+	<p class="separator"></p>
+	<div class="nav-links" style="font-family: Honk;">
+		<HeaderLink href="/">Home</HeaderLink>
+		<HeaderLink href="/sanity-blog">Blog</HeaderLink>
+		<HeaderLink href="/server-links">Server</HeaderLink>
+		<HeaderLink href="/about">About</HeaderLink>
+	</div>
 </header>
+
 <style>
 	@keyframes links-sliding {
 		0% {
@@ -31,7 +38,11 @@ import HeaderLink from "./HeaderLink.astro";
 		}
 	}
 	.nav-links {
+		display: flex;
+		gap: 10px;
 		font-size: 30px;
+		width: 100%;
+		justify-content: center;
 		/* transform: translateX(50dvw) */
 		/* animation: links-sliding 15s linear infinite */
 	}

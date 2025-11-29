@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="420" id="svg_newtons_cradle" role="img" aria-label="Animated Newton's cradle" viewBox="0 0 600 420" data-app="Xyris">
+    <defs>
+        <radialGradient id="ballGrad" cx="0.35" cy="0.35" r="0.9" fx="0.25" fy="0.25">
+            <stop offset="0" stop-color="#ffffff" stop-opacity="0.95">
+            </stop>
+            <stop offset="0.25" stop-color="#cfe8ff" stop-opacity="1">
+            </stop>
+            <stop offset="1" stop-color="#6aa6ff" stop-opacity="1">
+            </stop>
+        </radialGradient>
+        <linearGradient id="rimGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2d3b4f">
+            </stop>
+            <stop offset="1" stop-color="#111827">
+            </stop>
+        </linearGradient>
+        <linearGradient id="beamGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#dfe7ef">
+            </stop>
+            <stop offset="1" stop-color="#bfcad6">
+            </stop>
+        </linearGradient>
+        <radialGradient id="radialGradient-jN5X5tq1A4rErbPD9HkNox" cx="0.35" cy="0.35" r="0.9" fx="0.25" fy="0.25">
+            <stop offset="0" stop-color="#ffffff" stop-opacity="0.95">
+            </stop>
+            <stop offset="0.25" stop-color="#cfe8ff" stop-opacity="1">
+            </stop>
+            <stop offset="1" stop-color="#6aa6ff" stop-opacity="1">
+            </stop>
+        </radialGradient>
+        <radialGradient id="radialGradient-gnFG6X4GCANJh3o6QiDgXv" cx="0.35" cy="0.35" r="0.9" fx="0.25" fy="0.25">
+            <stop offset="0" stop-color="#ffffff" stop-opacity="0.95">
+            </stop>
+            <stop offset="0.25" stop-color="#cfe8ff" stop-opacity="1">
+            </stop>
+            <stop offset="1" stop-color="#6aa6ff" stop-opacity="1">
+            </stop>
+        </radialGradient>
+    </defs>
+    <rect id="inner_plate" x="-0.41542" y="-0.6015" width="600.001" height="420" rx="10" ry="10" fill="#f6fbff" transform-origin="center" style="transform-box: fill-box;" transform="matrix(0.999997845976402,-0.0020755824619278773,0.0020755824619278773,0.999997845976402,0,0)">
+    </rect>
+    <path d="M 300.359 364.471 C 443.953 364.471 557.062 364.226 557.062 377.481 C 557.062 390.736 439.557 411.372 295.963 411.372 C 152.369 411.372 39.2602 390.736 39.2602 377.481 C 39.2602 364.226 156.765 364.471 300.359 364.471 Z" fill="rgba(0, 0, 0, 0.13)" transform-origin="center" style="transform-box: fill-box;" transform="matrix(0.999997845976402,-0.0020755824619278773,0.0020755824619278773,0.999997845976402,0.3734563585967976,-0.03439522224346092)">
+    </path>
+    <g id="base" transform="matrix(0.999997845976402,-0.0020755824619278773,0.0020755824619278773,0.999997845976402,-0.6623347819396486,0.7946325272644117)" transform-origin="">
+        <rect id="base_plate" x="39.492" y="350.263" width="520" height="28" rx="6" ry="6" fill="#d7e1eb" stroke="#1f2a3a" stroke-width="2" transform="">
+        </rect>
+        <rect id="base_shadow" x="47.492" y="360.263" width="504" height="8" rx="4" ry="4" fill="#c2cdd8" opacity="0.7" transform="">
+        </rect>
+    </g>
+    <g id="cradle_group" transform-origin="center" style="transform-box: fill-box;" transform="matrix(0.999997845976402,-0.0020755824619278773,0.0020755824619278773,0.999997845976402,-0.09338077970346603,-0.004263857612272659)">
+        <g id="node2" transform="">
+            <line id="string2" x1="226.42" y1="48.9206" x2="226.42" y2="249.054" stroke="#2b3a4a" stroke-width="2" transform="">
+            </line>
+            <circle id="ball2" cx="226.42" cy="249.054" r="28" fill="url(#ballGrad)" stroke="#123" stroke-width="2" transform="">
+            </circle>
+            <ellipse id="gloss2" cx="218.42" cy="237.054" rx="10" ry="6" fill="#ffffff" opacity="0.6" transform="">
+            </ellipse>
+        </g>
+        <g id="node3" transform="">
+            <line id="string3" x1="283.672" y1="48.9206" x2="283.672" y2="249.329" stroke="#2b3a4a" stroke-width="2" transform="">
+            </line>
+            <circle id="ball3" cx="283.672" cy="249.329" r="28" fill="url(#ballGrad)" stroke="#123" stroke-width="2" transform="">
+            </circle>
+            <ellipse id="gloss3" cx="275.672" cy="237.329" rx="10" ry="6" fill="#ffffff" opacity="0.5" transform="">
+            </ellipse>
+        </g>
+        <g id="g-aeEuSbEATu1mwHZJX1Pr5k" transform="">
+            <line id="line-aZ9w2pAS3My6iPZCpfHnqE" x1="339.672" y1="48.9206" x2="339.672" y2="249.329" stroke="#2b3a4a" stroke-width="2" transform="">
+            </line>
+            <circle id="circle-2nbePKsxHamoExPu921THw" cx="339.672" cy="249.329" r="28" fill="url(#radialGradient-jN5X5tq1A4rErbPD9HkNox)" stroke="#123" stroke-width="2" transform="">
+            </circle>
+            <ellipse id="ellipse-fdDaHeSnRFhcPErVNQ9Bwn" cx="331.672" cy="237.329" rx="10" ry="6" fill="#ffffff" opacity="0.5" transform="">
+            </ellipse>
+        </g>
+        <g id="node5" transform-origin="top" transform="" style="transform-box: fill-box;">
+            <circle id="ball5" cx="397.335" cy="249.054" r="28" fill="url(#ballGrad)" stroke="#123" stroke-width="2" transform="">
+            </circle>
+            <ellipse id="gloss5" cx="389.337" cy="237.054" rx="10" ry="6" fill="#ffffff" opacity="0.7" transform="">
+            </ellipse>
+            <path d="M 397.337 48.6456 L 397.337 247.955" stroke="#2b3a4a" stroke-width="2" transform="">
+            </path>
+            <animateTransform attributeName="transform" type="rotate" begin="-0.00001" dur="7.963838181818182" keyTimes="0; 0.24885276591858638; 0.5; 1" values="0; -45; 0; 0" fill="freeze" additive="sum" calcMode="spline" keySplines="0.25 0.46 0.45 0.94; 0.55 0.055 0.675 0.19; 0 0 1 1" repeatCount="indefinite">
+            </animateTransform>
+        </g>
+        <g id="g-1Hd2MxLUm4YHgAz1xQQXMM" transform-origin="top" transform="" style="transform-box: fill-box;">
+            <circle id="circle-paf8QsHKnDTvJj1t8dxw5f" cx="170.418" cy="249.054" r="28" fill="url(#radialGradient-gnFG6X4GCANJh3o6QiDgXv)" stroke="#123" stroke-width="2" transform="">
+            </circle>
+            <ellipse id="ellipse-pLfSyASU2Fsc9TrHAPRVGM" cx="162.42" cy="237.054" rx="10" ry="6" fill="#ffffff" opacity="0.7" transform="">
+            </ellipse>
+            <path d="M 170.42 48.6456 L 170.42 247.955" stroke="#2b3a4a" stroke-width="2" transform="">
+            </path>
+            <animateTransform attributeName="transform" type="rotate" begin="-0.00001" dur="7.963838181818182" keyTimes="0; 0.5; 0.7488527659185864; 1" values="0; 0; 45; 0" fill="freeze" additive="sum" calcMode="spline" keySplines="0 0 1 1; 0.25 0.46 0.45 0.94; 0.55 0.055 0.675 0.19" repeatCount="indefinite">
+            </animateTransform>
+        </g>
+    </g>
+    <g id="frame" transform="matrix(0.999997845976402,-0.0020755824619278773,0.0020755824619278773,0.999997845976402,-0.6623347819396486,0.7946325272644117)" transform-origin="">
+        <rect id="right_post" x="510.493" y="30.2627" width="18" height="320" rx="4" ry="4" fill="#dde6ef" stroke="#1e293b" stroke-width="2" transform="">
+        </rect>
+        <rect id="left_post" x="68.492" y="30.2627" width="18" height="320" rx="4" ry="4" fill="#dde6ef" stroke="#1e293b" stroke-width="2" transform="">
+        </rect>
+        <rect id="left_post_rim" x="68.492" y="30.2627" width="9" height="320" rx="4" ry="4" fill="url(#rimGrad)" opacity="0.22" transform="">
+        </rect>
+        <rect id="right_post_rim" x="519.493" y="30.2627" width="9" height="320" rx="4" ry="4" fill="url(#rimGrad)" opacity="0.22" transform="">
+        </rect>
+        <rect id="top_beam" x="78.492" y="30.2627" width="460" height="18" rx="6" ry="6" fill="url(#beamGrad)" stroke="#1e293b" stroke-width="2" transform="">
+        </rect>
+        <rect id="top_beam_edge" x="78.492" y="30.2627" width="460" height="6" rx="6" ry="6" fill="#ffffff" opacity="0.55" transform="">
+        </rect>
+    </g>
+</svg>
