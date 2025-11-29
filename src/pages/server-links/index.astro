@@ -5,28 +5,126 @@ import Header from "../../components/Header.astro";
 
 // src/pages/dashboard.astro
 
-const serverIpOrHostname = "http://10.0.0.79";
+const serverIp = "http://10.0.0.79";
 
-// I've extracted all the services with a web interface from your docker ps output.
-const services = [
-    { name: "Astro site", port: 4690, description: "Marcelo Blog" },
-    { name: "qBittorrent", port: 8081, description: "Torrent client" },
-    { name: "Jackett", port: 9117, description: "API for torrent trackers" },
-    { name: "Radarr", port: 7878, description: "Movie collection manager" },
-    { name: "Ombi", port: 3579, description: "Media request system" },
-    { name: "Sonarr", port: 8989, description: "TV series manager" },
-    { name: "Coolify", port: 8000, description: "Self-hosting platform" },
-    { name: "Appsmith", port: 85, description: "Low-code app builder" },
-    { name: "Logseq", port: 3010, description: "Note Taking in .md" },
-    { name: "n8n", port: 5678, description: "Workflow automation" },
-    { name: "Evolution API", port: 8080, description: "WhatsApp API" },
+interface Service {
+    name: string;
+    localPort?: number;
+    domain?: string;
+    description: string;
+}
+
+// Mapped from your Docker PS, Nginx Config, and Cloudflare DNS
+const services: Service[] = [
+    {
+        name: "Astro Site",
+        localPort: 4690,
+        domain: "astro.ordotech.space",
+        description: "Marcelo Blog",
+    },
+    {
+        name: "Nginx Proxy Manager",
+        localPort: 81,
+        domain: "npm.ordotech.space",
+        description: "Reverse Proxy Management",
+    },
+    {
+        name: "Pi-hole",
+        localPort: 80, // Standard web port
+        domain: "pihole.ordotech.space",
+        description: "Network-wide Ad Blocking",
+    },
+    {
+        name: "Appsmith",
+        localPort: 85,
+        domain: "apps.ordotech.space",
+        description: "Low-code app builder",
+    },
+    {
+        name: "LinguaCafe",
+        localPort: 9191,
+        domain: "lingua.ordotech.space",
+        description: "Language learning platform",
+    },
+    {
+        name: "Abibliadigital",
+        localPort: 3777,
+        domain: "bible.ordotech.space",
+        description: "Bible Application",
+    },
+    {
+        name: "Logseq",
+        localPort: 3010,
+        domain: "logseq.ordotech.space",
+        description: "Knowledge base & notes",
+    },
     {
         name: "Maybe Finance",
-        port: 3000,
+        localPort: 3888,
+        // No DNS match found in provided list, keeping local only
         description: "Personal finance tracker",
     },
-    { name: "Jellyfin", port: 8096, description: "Media server" },
-    { name: "Deluge", port: 8112, description: "Torrent client" },
+    {
+        name: "n8n",
+        localPort: 5678,
+        domain: "n8n.ordotech.space",
+        description: "Workflow automation",
+    },
+    {
+        name: "Evolution API",
+        localPort: 8080,
+        domain: "evolution.ordotech.space",
+        description: "WhatsApp API",
+    },
+    {
+        name: "qBittorrent",
+        localPort: 8081,
+        domain: "qbittorrent.ordotech.space",
+        description: "Torrent client",
+    },
+    {
+        name: "Deluge",
+        localPort: 8112,
+        domain: "deluge.ordotech.space",
+        description: "Torrent client (Backup)",
+    },
+    {
+        name: "Jellyfin",
+        localPort: 8096,
+        domain: "jellyfin.ordotech.space",
+        description: "Media Server",
+    },
+    {
+        name: "Sonarr",
+        localPort: 8989,
+        domain: "sonarr.ordotech.space",
+        description: "TV Series Manager",
+    },
+    {
+        name: "Radarr",
+        localPort: 7878,
+        domain: "radarr.ordotech.space",
+        description: "Movie Manager",
+    },
+    {
+        name: "Ombi",
+        localPort: 3579,
+        domain: "ombi.ordotech.space",
+        description: "Media Request System",
+    },
+    {
+        name: "Jackett",
+        localPort: 9117,
+        domain: "jackett.ordotech.space",
+        description: "Torrent Tracker API",
+    },
+    {
+        name: "Coolify",
+        // Port inferred from previous config/standard, container awk0... might be related
+        localPort: 8000,
+        domain: "coolify.ordotech.space",
+        description: "Self-hosting Platform",
+    },
 ];
 ---
 
@@ -40,67 +138,140 @@ const services = [
         <style>
             .services-grid {
                 display: grid;
-                /* This will create a responsive grid that fits as many columns as possible */
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 1rem;
-                padding: 1rem;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 1.5rem;
+                padding: 1.5rem;
             }
+
             .service-card {
+                background-color: #fff;
+                border: 1px solid #e0e0e0;
+                border-radius: 12px;
+                padding: 1.5rem;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                text-decoration: none;
-                color: inherit;
-                border: 1px solid black;
-                border-radius: 8px;
-                padding: 1.5rem;
                 transition:
-                    transform 0.2s ease-in-out,
-                    box-shadow 0.2s ease-in-out;
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+                height: 100%;
             }
+
             .service-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                transform: translateY(-4px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+                border-color: #d0d0d0;
             }
+
+            .card-header {
+                margin-bottom: 0.5rem;
+            }
+
             .service-card h3 {
-                margin: 0 0 0.5rem 0;
-                font-size: 1.5rem;
+                margin: 0;
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: #1a1a1a;
             }
-            .service-card .port {
-                font-family: monospace;
-                font-size: 0.9rem;
-                color: #555;
-                margin-bottom: 0.75rem;
+
+            .description {
+                font-size: 0.95rem;
+                color: #666;
+                margin-bottom: 1.5rem;
+                flex-grow: 1; /* Pushes the buttons to the bottom */
             }
-            .service-card .description {
-                font-size: 1rem;
-                color: #333;
+
+            .links-container {
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                margin-top: auto;
+            }
+
+            .link-btn {
+                text-decoration: none;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                transition: background-color 0.2s;
+                flex: 1;
+                text-align: center;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+            }
+
+            .link-local {
+                background-color: #f3f4f6;
+                color: #374151;
+                border: 1px solid #e5e7eb;
+            }
+
+            .link-local:hover {
+                background-color: #e5e7eb;
+            }
+
+            .link-public {
+                background-color: #2563eb;
+                color: white;
+                border: 1px solid #2563eb;
+            }
+
+            .link-public:hover {
+                background-color: #1d4ed8;
+            }
+
+            /* Icon hints */
+            .icon {
+                font-style: normal;
+                font-size: 1.1em;
             }
         </style>
     </head>
     <body>
         <Header />
         <main>
-            <h1>Services Dashboard</h1>
-            <p>
-                A quick-access launchpad for all running applications on my
-                server.
-            </p>
+            <div style="padding: 1rem 1.5rem; text-align: center;">
+                <h1>Services Dashboard</h1>
+                <p>Status and access points for the server ecosystem.</p>
+            </div>
 
             <div class="services-grid">
                 {
                     services.map((service) => (
-                        <a
-                            class="service-card"
-                            href={`${serverIpOrHostname}:${service.port}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <h3>{service.name}</h3>
-                            <p class="port">Port: {service.port}</p>
+                        <div class="service-card">
+                            <div class="card-header">
+                                <h3>{service.name}</h3>
+                            </div>
                             <p class="description">{service.description}</p>
-                        </a>
+
+                            <div class="links-container">
+                                {service.localPort && (
+                                    <a
+                                        class="link-btn link-local"
+                                        href={`${serverIp}:${service.localPort}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title={`Local Access: ${serverIp}:${service.localPort}`}
+                                    >
+                                        <span class="icon">🏠</span> Local
+                                    </a>
+                                )}
+
+                                {service.domain && (
+                                    <a
+                                        class="link-btn link-public"
+                                        href={`https://${service.domain}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title={`Public Access: ${service.domain}`}
+                                    >
+                                        <span class="icon">🌐</span> Public
+                                    </a>
+                                )}
+                            </div>
+                        </div>
                     ))
                 }
             </div>
