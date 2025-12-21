@@ -1,26 +1,28 @@
 ---
-import { marked } from 'marked';
+import { marked } from "marked";
 import { sanityClient } from "sanity:client";
-import type { BlogPost } from '../../Sanity';
-import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import type { BlogPost } from "../../Sanity";
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
 
 export async function getStaticPaths() {
-  const posts = await sanityClient.fetch(`*[_type == "blogPost"] | order(_createdAt desc)`);
-  console.log('posts',posts);
-  return posts.map((post: BlogPost) => ({
-    params: { slug: post._id },
-    props: { post },
-  }));
+	const posts = await sanityClient.fetch(
+		`*[_type == "blogPost"] | order(_createdAt desc)`,
+	);
+	console.log("posts", posts);
+	return posts.map((post: BlogPost) => ({
+		params: { slug: post._id },
+		props: { post },
+	}));
 }
 
-const { post } = Astro.props as {post: BlogPost};
+const { post } = Astro.props as { post: BlogPost };
 if (!post) {
-  return Astro.redirect('/404');
+	return Astro.redirect("/404");
 }
 
-const htmlContent = marked.parse(post.mdxContent || '');
+const htmlContent = marked.parse(post.mdxContent || "");
 ---
 
 <!doctype html>
@@ -30,13 +32,20 @@ const htmlContent = marked.parse(post.mdxContent || '');
 		<meta name="viewport" content="width=device-width" />
 		<title>{post.title}</title>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		
+		<style>
+			article {
+				width: 1080px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 2em 1em;
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
-		 
+
 		<main>
-			<article >
+			<article>
 				<h1>{post.title}</h1>
 				<time datetime={post._createdAt}>{post._createdAt}</time>
 				<div set:html={htmlContent} />
@@ -45,3 +54,7 @@ const htmlContent = marked.parse(post.mdxContent || '');
 		<!-- Add Footer if needed -->
 	</body>
 </html>
+
+<!-- 
+
+-->
