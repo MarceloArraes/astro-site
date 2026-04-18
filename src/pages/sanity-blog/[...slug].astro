@@ -5,56 +5,225 @@ import type { BlogPost } from "../../Sanity";
 import BaseHead from "../../components/BaseHead.astro";
 import Header from "../../components/Header.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+import { calculateReadingTime } from "../../lib/reading-time";
+import { generateTOC } from "../../lib/toc";
 
 export async function getStaticPaths() {
-	const posts = await sanityClient.fetch(
-		`*[_type == "blogPost"] | order(_createdAt desc)`,
-	);
-	console.log("posts", posts);
-	return posts.map((post: BlogPost) => ({
-		params: { slug: post._id },
-		props: { post },
-	}));
+  let posts: BlogPost[] = [];
+  try {
+    posts = await sanityClient.fetch(
+      `*[_type == "blogPost"] | order(_createdAt desc)`,
+    );
+  } catch (error) {
+    console.warn("Failed to fetch Sanity posts for static paths:", error);
+    return [];
+  }
+  console.log("posts", posts);
+  return posts.map((post: BlogPost) => ({
+    params: { slug: post._id },
+    props: { post },
+  }));
 }
 
 const { post } = Astro.props as { post: BlogPost };
 if (!post) {
-	return Astro.redirect("/404");
+  return Astro.redirect("/404");
 }
 
 const htmlContent = marked.parse(post.mdxContent || "");
+const readingTimeMinutes = calculateReadingTime(post.mdxContent || "");
+const toc = generateTOC(post.mdxContent || "");
+
+// Fetch related posts (same query, exclude current post, take 3)
+let relatedPosts: BlogPost[] = [];
+try {
+  const allPosts = await sanityClient.fetch(
+    `*[_type == "blogPost" && _id != $currentId] | order(_createdAt desc)[0..3]`,
+    { currentId: post._id },
+  );
+  relatedPosts = allPosts;
+} catch (error) {
+  console.warn("Failed to fetch related posts:", error);
+}
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>{post.title}</title>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			article {
-				width: 1080px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 2em 1em;
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{post.title}</title>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      article {
+        width: 1080px;
+        max-width: calc(100% - 2em);
+        margin: auto;
+        padding: 2em 1em;
+      }
+      .article-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .article-header h1 {
+        margin-bottom: 0.5rem;
+      }
+      .post-meta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        color: var(--gray);
+        font-size: 0.9rem;
+      }
+      .post-meta time {
+        font-style: normal;
+      }
+      .separator {
+        color: var(--gray-light);
+      }
+      .reading-time {
+        color: var(--gray);
+      }
+      /* Article hover effect on meta */
+      article:hover .post-meta,
+      article:hover .reading-time {
+        color: var(--gray-dark);
+      }
+      /* Table of Contents */
+      .toc {
+        background: var(--gray-light);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .toc-title {
+        font-weight: bold;
+        margin-bottom: 0.75rem;
+        color: var(--accent-dark);
+      }
+      .toc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .toc-list li {
+        margin-bottom: 0.5rem;
+      }
+      .toc-list a {
+        color: var(--gray-dark);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .toc-list a:hover {
+        color: var(--accent-dark);
+        text-decoration: underline;
+      }
+      .toc-level-2 {
+        font-weight: 500;
+      }
+      .toc-level-3 {
+        margin-left: 1.5rem;
+        font-size: 0.9rem;
+      }
+      /* Related Posts */
+      .related-posts {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--gray-light);
+      }
+      .related-posts-title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: var(--accent-dark);
+      }
+      .related-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .related-item {
+        padding: 1rem;
+        background: var(--gray-light);
+        border-radius: 8px;
+        text-decoration: none;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .related-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--box-shadow);
+      }
+      .related-item h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1rem;
+        color: var(--accent-dark);
+      }
+      .related-item .date {
+        font-size: 0.8rem;
+        color: var(--gray);
+        margin: 0;
+      }
+      @media (max-width: 720px) {
+        .related-list {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
 
-		<main>
-			<article>
-				<h1>{post.title}</h1>
-				<time datetime={post._createdAt}>{post._createdAt}</time>
-				<div set:html={htmlContent} />
-			</article>
-		</main>
-		<!-- Add Footer if needed -->
-	</body>
+    <main>
+      <article>
+        <div class="article-header">
+          <h1>{post.title}</h1>
+          <div class="post-meta">
+            <time datetime={post._createdAt}>
+              {new Date(post._createdAt).toLocaleDateString()}
+            </time>
+            <span class="separator">•</span>
+            <span class="reading-time">{readingTimeMinutes} min read</span>
+          </div>
+        </div>
+
+        {
+          toc.length > 0 && (
+            <div class="toc">
+              <div class="toc-title">Table of Contents</div>
+              <ul class="toc-list">
+                {toc.map((item) => (
+                  <li class={`toc-level-${item.level}`}>
+                    <a href={`#${item.id}`}>{item.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+
+        <div set:html={htmlContent} />
+
+        {
+          relatedPosts.length > 0 && (
+            <div class="related-posts">
+              <h3 class="related-posts-title">Related Posts</h3>
+              <div class="related-list">
+                {relatedPosts.map((related) => (
+                  <a class="related-item" href={`/sanity-blog/${related._id}/`}>
+                    <h4>{related.title}</h4>
+                    <p class="date">
+                      {new Date(related._createdAt).toLocaleDateString("en-AU")}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </article>
+    </main>
+    <!-- Add Footer if needed -->
+  </body>
 </html>
-
-<!-- 
-
--->

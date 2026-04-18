@@ -1,11 +1,12 @@
 {
-  "name": "",
+  "name": "astro-blog",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
+    "dev:search": "astro build && pagefind --site dist && cp -r dist/pagefind public/ && astro dev",
     "astro": "astro"
   },
   "dependencies": {
@@ -28,5 +29,8 @@
     "sanity": "^4.10.3",
     "sharp": "^0.34.3",
     "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.2"
   }
 }

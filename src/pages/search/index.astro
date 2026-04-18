@@ -1,0 +1,190 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Search - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <style>
+      main {
+        width: 1080px;
+        max-width: calc(100% - 2em);
+        margin: auto;
+        padding: 2em 1em;
+      }
+      .search-container {
+        max-width: 800px;
+        margin: 2rem auto;
+      }
+      #search {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.2rem;
+        border: 2px solid var(--gray);
+        border-radius: 8px;
+        margin-bottom: 2rem;
+      }
+      #search:focus {
+        outline: none;
+        border-color: var(--accent-dark);
+      }
+      #results {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .result-item {
+        padding: 1.5rem;
+        border: 1px solid var(--gray-light);
+        border-radius: 8px;
+        text-decoration: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .result-item:hover {
+        border-color: var(--accent-dark);
+        box-shadow: var(--box-shadow);
+      }
+      .result-item h2 {
+        margin: 0 0 0.5rem 0;
+        color: var(--accent-dark);
+      }
+      .result-item .excerpt {
+        color: var(--gray-dark);
+        margin-bottom: 0.5rem;
+      }
+      .result-item .date {
+        font-size: 0.85rem;
+        color: var(--gray);
+      }
+      .no-results {
+        text-align: center;
+        color: var(--gray);
+        padding: 2rem;
+      }
+      .loading {
+        text-align: center;
+        color: var(--gray);
+        padding: 2rem;
+      }
+      .dev-notice {
+        background: var(--gray-light);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+      }
+      .dev-notice code {
+        background: var(--gray);
+        color: var(--white);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="search-container">
+        <h1>Search</h1>
+        <p class="dev-notice">
+          <strong>Note:</strong> Search requires a production build. Run <code
+            >npm run build</code
+          > then <code>npm run preview</code> to test search functionality.
+        </p>
+        <input
+          type="text"
+          id="search"
+          placeholder="Search posts..."
+          aria-label="Search"
+          autocomplete="off"
+        />
+        <div id="results"></div>
+      </div>
+    </main>
+    <Footer />
+
+    <script type="module">
+      const searchInput = document.getElementById("search");
+      const resultsDiv = document.getElementById("results");
+      let pagefindInitialized = false;
+      let pagefindError = false;
+
+      // Initialize Pagefind
+      async function initPagefind() {
+        if (!pagefindInitialized && !pagefindError) {
+          try {
+            const { search, options } = await import("/pagefind/pagefind.js");
+
+            // Initialize with correct basePath
+            await options({ basePath: "/pagefind/" });
+
+            pagefindInitialized = true;
+            return search;
+          } catch (error) {
+            console.error("Failed to load Pagefind:", error);
+            pagefindError = true;
+            return null;
+          }
+        }
+        return pagefindInitialized
+          ? (await import("/pagefind/pagefind.js")).search
+          : null;
+      }
+
+      searchInput.addEventListener("input", async (e) => {
+        const query = e.target.value.trim();
+
+        if (!query) {
+          resultsDiv.innerHTML = "";
+          return;
+        }
+
+        resultsDiv.innerHTML = '<p class="loading">Searching...</p>';
+
+        try {
+          const searchFn = await initPagefind();
+
+          if (!searchFn) {
+            resultsDiv.innerHTML =
+              '<p class="no-results">Search is not available. Please build the site first.</p>';
+            return;
+          }
+
+          const result = await searchFn(query);
+          const results = result.results;
+
+          if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="no-results">No results found</p>';
+            return;
+          }
+
+          resultsDiv.innerHTML = await Promise.all(
+            results.map(async (result) => {
+              const data = await result.data();
+              const date = data.date
+                ? new Date(data.date).toLocaleDateString()
+                : "";
+              console.log("data", data);
+              return `
+								<a href="${data.url}" class="result-item">
+									<h2>${data.title}</h2>
+									${data.excerpt ? `<p class="excerpt">${data.excerpt}</p>` : ""}
+									${date ? `<p class="date">${date}</p>` : ""}
+								</a>
+							`;
+            }),
+          ).then((arr) => arr.join(""));
+        } catch (error) {
+          console.error("Search error:", error);
+          resultsDiv.innerHTML = '<p class="no-results">Search unavailable</p>';
+        }
+      });
+    </script>
+  </body>
+</html>
