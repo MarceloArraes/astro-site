@@ -1,10 +1,13 @@
 services:
   app:
-    # Coolify will build the Dockerfile in your repo if it finds one
-    image: 'ghcr.io/marceloarraes/astro-site:latest'
-    container_name: astro-site-prod
+    # Use an environment variable for the image tag if possible (see note below)
+    image: "ghcr.io/marceloarraes/astro-site:${IMAGE_TAG:-latest}"
+
+    # Make the container name dynamic based on the environment
+    container_name: astro-site-${APP_ENV:-prod}
+
     pull_policy: always
     ports:
-      # Map your host port 4690 to the container's Nginx port 80
-      - '4690:80'
+      # Use an environment variable for the host port, fallback to 4690
+      - "${HOST_PORT:-4690}:80"
     restart: unless-stopped
