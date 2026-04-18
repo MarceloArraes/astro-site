@@ -2,17 +2,17 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ main ]
-  repository_dispatch: 
-    types: [ sanity-update ] 
-  workflow_dispatch: 
+    branches: [ main, agent_branch ]
+  repository_dispatch:
+    types: [ sanity-update ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read  
-      packages: write 
+      contents: read
+      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,7 +27,17 @@ jobs:
       - name: downcase REPO
         id: lowercase-repo
         run: |
-         echo "REPO=${GITHUB_REPOSITORY@L}" >> "$GITHUB_OUTPUT"
+          echo "REPO=${GITHUB_REPOSITORY@L}" >> "$GITHUB_OUTPUT"
+
+      # UPDATED: Explicitly check for the Sanity repository_dispatch event
+      - name: Determine Image Tag
+        id: image-tag
+        run: |
+          if [ "${{ github.ref_name }}" == "main" ] || [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            echo "TAG=latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "TAG=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -35,10 +45,20 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{steps.lowercase-repo.outputs.REPO}}:latest
+            ghcr.io/${{steps.lowercase-repo.outputs.REPO}}:${{ steps.image-tag.outputs.TAG }}
             ghcr.io/${{steps.lowercase-repo.outputs.REPO}}:${{ github.sha }}
           build-args: |
             VITE_SANITY_PROJECT_ID=${{ secrets.VITE_SANITY_PROJECT_ID }}
 
-      - name: Trigger Coolify Redeployment
-        run: 'curl --fail -X POST -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" ${{ secrets.COOLIFY_DEPLOYMENT_HOOK }}'
+      # UPDATED: Trigger Prod if it's main OR if it's the Sanity webhook
+      - name: Trigger Coolify PROD Redeployment
+        if: github.ref_name == 'main' || github.event_name == 'repository_dispatch'
+        run: "curl --fail -X POST -H \"Authorization: Bearer ${{
+          secrets.COOLIFY_API_TOKEN }}\" ${{ secrets.COOLIFY_DEPLOYMENT_HOOK }}"
+
+      - name: Trigger Coolify DEV Redeployment
+        if: github.ref_name == 'agent_branch' || github.event_name ==
+          'repository_dispatch'
+        run: "curl --fail -X POST -H \"Authorization: Bearer ${{
+          secrets.COOLIFY_API_TOKEN }}\" ${{ secrets.COOLIFY_DEV_DEPLOYMENT_HOOK
+          }}"
