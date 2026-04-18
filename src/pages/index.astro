@@ -5,49 +5,33 @@ import Header from "../components/Header.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import { sanityClient } from "sanity:client";
 import type { BlogPost } from "../Sanity";
-import { getCollection } from "astro:content";
-import BlogPostInternal from "../layouts/BlogPost.astro";
-import { render } from "astro:content";
 
-const fetchProjects = await sanityClient.fetch(
-	`*[_type=='blogPost'] | order(_createdAt desc)[0..5]`,
-);
-
-const post = (await getCollection("blog")).filter(
-	(post) => post.id == "welcomepost",
-)[0];
-
-console.log("first posts", post);
-const { Content } = await render(post);
-// console.log("fetchProjects", fetchProjects);
+// Fetch latest 5 posts from Sanity for homepage
+let recentPosts: BlogPost[] = [];
+try {
+	recentPosts = await sanityClient.fetch(
+		`*[_type=='blogPost'] | order(publishedAt desc)[0..5]`,
+	);
+} catch (error) {
+	console.warn('Failed to fetch Sanity posts for homepage:', error);
+}
 ---
 
-<!-- 
-.div2 { grid-area: 1 / 1 / 2 / 2; }
-.div3 { grid-area: 1 / 2 / 2 / 3; }
-.div4 { grid-area: 1 / 3 / 2 / 4; }
---><!doctype html>
+<!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			/* @keyframes decoration-slide {
-			0% {underl }
-			100% {text-decoration-color: var(--black) }
-			} */
 			h4 {
-				/* Add these two lines */
-				display: inline; /* Allows the element to break into line boxes */
-				box-decoration-break: clone; /* Applies styles to each line box */
-				-webkit-box-decoration-break: clone; /* For older browser compatibility */
-
-				/* Your original styles are perfect */
+				display: inline;
+				box-decoration-break: clone;
+				-webkit-box-decoration-break: clone;
 				background-image: linear-gradient(currentColor, currentColor);
 				text-decoration: none;
 				background-position: 0% 100%;
 				background-repeat: no-repeat;
 				background-size: 0% 2px;
-				transition: background-size 0.3s ease; /* Added 'ease' for smoothness */
+				transition: background-size 0.3s ease;
 			}
 
 			h4:hover,
@@ -62,20 +46,11 @@ const { Content } = await render(post);
 				row-gap: 5px;
 				column-gap: 5px;
 			}
-			.front-page-body {
-			}
 			.front-page-posts {
 				text-decoration: none;
 				border: 1px solid black;
 				padding-top: 10px;
-				/* font-size: 20px; */
 				text-align: center;
-			}
-			.welcomepost {
-				width: 1080px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 2em 1em;
 			}
 		</style>
 	</head>
@@ -83,14 +58,10 @@ const { Content } = await render(post);
 		<Header />
 
 		<main>
-			<div class="welcomepost">
-				<Content />
-			</div>
-			<!-- style="font-family: 'Lugrasimo';" -->
 			<div class="">
 				<div class="list-for-posts">
 					{
-						fetchProjects.map((post: BlogPost) => (
+						recentPosts.map((post: BlogPost) => (
 							<a
 								class="front-page-posts"
 								href={`/sanity-blog/${post._id}`}
@@ -100,7 +71,7 @@ const { Content } = await render(post);
 									<p>{post.author}</p>
 									<p>
 										{new Date(
-											post._updatedAt,
+											post.publishedAt || post._createdAt,
 										).toLocaleDateString()}
 									</p>
 								</div>
