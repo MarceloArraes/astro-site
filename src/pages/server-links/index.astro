@@ -8,339 +8,350 @@ import Header from "../../components/Header.astro";
 const serverIp = "http://10.0.0.79";
 
 interface Service {
-    name: string;
-    localPort?: number;
-    domain?: string;
-    description: string;
+  name: string;
+  localPort?: number;
+  domain?: string;
+  description: string;
 }
 
 // Mapped from your Docker PS, Nginx Config, and Cloudflare DNS
 const services: Service[] = [
-    {
-        name: "Astro Site",
-        localPort: 4690,
-        domain: "astro.ordotech.space",
-        description: "Marcelo Blog",
-    },
-    {
-        name: "Nginx Proxy Manager",
-        localPort: 81,
-        domain: "npm.ordotech.space",
-        description: "Reverse Proxy Management",
-    },
-    {
-        name: "Pi-hole",
-        localPort: 80, // Standard web port
-        domain: "pihole.ordotech.space",
-        description: "Network-wide Ad Blocking",
-    },
-    {
-        name: "Appsmith",
-        localPort: 85,
-        domain: "apps.ordotech.space",
-        description: "Low-code app builder",
-    },
-    {
-        name: "LinguaCafe",
-        localPort: 9191,
-        domain: "lingua.ordotech.space",
-        description: "Language learning platform",
-    },
-    {
-        name: "Abibliadigital",
-        localPort: 3777,
-        domain: "bible.ordotech.space",
-        description: "Bible Application",
-    },
-    {
-        name: "Logseq",
-        localPort: 3010,
-        domain: "logseq.ordotech.space",
-        description: "Knowledge base & notes",
-    },
-    {
-        name: "Maybe Finance",
-        localPort: 3888,
-        // No DNS match found in provided list, keeping local only
-        description: "Personal finance tracker",
-    },
-    {
-        name: "n8n",
-        localPort: 5678,
-        domain: "automation.ordotech.space",
-        description: "Workflow automation",
-    },
-    {
-        name: "Evolution API",
-        localPort: 8080,
-        domain: "evolution.ordotech.space",
-        description: "WhatsApp API",
-    },
-    {
-        name: "qBittorrent",
-        localPort: 8081,
-        domain: "qbittorrent.ordotech.space",
-        description: "Torrent client",
-    },
-    {
-        name: "Deluge",
-        localPort: 8112,
-        domain: "deluge.ordotech.space",
-        description: "Torrent client (Backup)",
-    },
-    {
-        name: "Jellyfin",
-        localPort: 8096,
-        domain: "jellyfin.ordotech.space",
-        description: "Media Server",
-    },
-    {
-        name: "Sonarr",
-        localPort: 8989,
-        domain: "sonarr.ordotech.space",
-        description: "TV Series Manager",
-    },
-    {
-        name: "Radarr",
-        localPort: 7878,
-        domain: "radarr.ordotech.space",
-        description: "Movie Manager",
-    },
-    {
-        name: "Ombi",
-        localPort: 3579,
-        domain: "ombi.ordotech.space",
-        description: "Media Request System",
-    },
-    {
-        name: "Jackett",
-        localPort: 9117,
-        domain: "jackett.ordotech.space",
-        description: "Torrent Tracker API",
-    },
-    {
-        name: "Coolify",
-        // Port inferred from previous config/standard, container awk0... might be related
-        localPort: 8000,
-        domain: "mydeploy.ordotech.space",
-        description: "Self-hosting Platform",
-    },
+  {
+    name: "Astro Site",
+    localPort: 4690,
+    domain: "astro.ordotech.space",
+    description: "Marcelo Blog",
+  },
+  {
+    name: "Nginx Proxy Manager",
+    localPort: 81,
+    domain: "npm.ordotech.space",
+    description: "Reverse Proxy Management",
+  },
+  {
+    name: "Pi-hole",
+    localPort: 80, // Standard web port
+    domain: "pihole.ordotech.space",
+    description: "Network-wide Ad Blocking",
+  },
+  {
+    name: "Appsmith",
+    localPort: 85,
+    domain: "apps.ordotech.space",
+    description: "Low-code app builder",
+  },
+  {
+    name: "LinguaCafe",
+    localPort: 9191,
+    domain: "lingua.ordotech.space",
+    description: "Language learning platform",
+  },
+  {
+    name: "Abibliadigital",
+    localPort: 3777,
+    domain: "bible.ordotech.space",
+    description: "Bible Application",
+  },
+  {
+    name: "Logseq",
+    localPort: 3010,
+    domain: "logseq.ordotech.space",
+    description: "Knowledge base & notes",
+  },
+  {
+    name: "Maybe Finance",
+    localPort: 3888,
+    // No DNS match found in provided list, keeping local only
+    description: "Personal finance tracker",
+  },
+  {
+    name: "n8n",
+    localPort: 5678,
+    domain: "automation.ordotech.space",
+    description: "Workflow automation",
+  },
+  {
+    name: "Evolution API",
+    localPort: 8080,
+    domain: "evolution.ordotech.space",
+    description: "WhatsApp API",
+  },
+  {
+    name: "qBittorrent",
+    localPort: 8081,
+    domain: "qbittorrent.ordotech.space",
+    description: "Torrent client",
+  },
+  {
+    name: "Deluge",
+    localPort: 8112,
+    domain: "deluge.ordotech.space",
+    description: "Torrent client (Backup)",
+  },
+  {
+    name: "Jellyfin",
+    localPort: 8096,
+    domain: "jellyfin.ordotech.space",
+    description: "Media Server",
+  },
+  {
+    name: "Sonarr",
+    localPort: 8989,
+    domain: "sonarr.ordotech.space",
+    description: "TV Series Manager",
+  },
+  {
+    name: "Radarr",
+    localPort: 7878,
+    domain: "radarr.ordotech.space",
+    description: "Movie Manager",
+  },
+  {
+    name: "Ombi",
+    localPort: 3579,
+    domain: "ombi.ordotech.space",
+    description: "Media Request System",
+  },
+  {
+    name: "Jackett",
+    localPort: 9117,
+    domain: "jackett.ordotech.space",
+    description: "Torrent Tracker API",
+  },
+  {
+    name: "Coolify",
+    // Port inferred from previous config/standard, container awk0... might be related
+    localPort: 8000,
+    domain: "mydeploy.ordotech.space",
+    description: "Self-hosting Platform",
+  },
+  {
+    name: "PDF Tools",
+    localPort: 8084,
+    domain: "pdftools.ordotech.space",
+    description: "PDF tools",
+  },
 ];
 ---
 
 <!doctype html>
 <html lang="en">
-    <head>
-        <BaseHead
-            title="My Services"
-            description="A dashboard for my self-hosted services."
-        />
-        <style>
-            main {
-                width: 1080px;
-                max-width: calc(100% - 2em);
-                margin: auto;
-                padding: 2em 1em;
-            }
+  <head>
+    <BaseHead
+      title="My Services"
+      description="A dashboard for my self-hosted services."
+    />
+    <style>
+      main {
+        width: 1080px;
+        max-width: calc(100% - 2em);
+        margin: auto;
+        padding: 2em 1em;
+      }
 
-            .page-header {
-                text-align: center;
-                margin-bottom: 2rem;
-            }
+      .page-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
 
-            .page-header h1 {
-                font-family: 'Honk', sans-serif;
-                font-size: 3rem;
-                margin: 0;
-                color: var(--accent-dark);
-            }
+      .page-header h1 {
+        font-family: "Honk", sans-serif;
+        font-size: 3rem;
+        margin: 0;
+        color: var(--accent-dark);
+      }
 
-            .page-header p {
-                color: var(--gray);
-                font-size: 1.1rem;
-                margin: 0.5rem 0 0 0;
-            }
+      .page-header p {
+        color: var(--gray);
+        font-size: 1.1rem;
+        margin: 0.5rem 0 0 0;
+      }
 
-            .services-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 1.5rem;
-                padding: 1rem 0;
-            }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem 0;
+      }
 
-            .service-card {
-                background: linear-gradient(180deg, #fffef9 0%, #f9f6ed 100%);
-                border: 2px solid var(--gray-light);
-                border-radius: 4px;
-                padding: 1.25rem;
-                display: flex;
-                flex-direction: column;
-                transition: all 0.2s ease;
-                position: relative;
-            }
+      .service-card {
+        background: linear-gradient(180deg, #fffef9 0%, #f9f6ed 100%);
+        border: 2px solid var(--gray-light);
+        border-radius: 4px;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.2s ease;
+        position: relative;
+      }
 
-            .service-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 4px;
-                background: linear-gradient(90deg, var(--gray-light), var(--gray), var(--gray-light));
-                opacity: 0;
-                transition: opacity 0.2s ease;
-            }
+      .service-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--gray-light),
+          var(--gray),
+          var(--gray-light)
+        );
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
 
-            .service-card:hover {
-                border-color: var(--gray);
-                box-shadow: 4px 4px 0 var(--gray-light);
-                transform: translate(-2px, -2px);
-            }
+      .service-card:hover {
+        border-color: var(--gray);
+        box-shadow: 4px 4px 0 var(--gray-light);
+        transform: translate(-2px, -2px);
+      }
 
-            .service-card:hover::before {
-                opacity: 1;
-            }
+      .service-card:hover::before {
+        opacity: 1;
+      }
 
-            .card-header {
-                margin-bottom: 0.75rem;
-                border-bottom: 1px dashed var(--gray-light);
-                padding-bottom: 0.75rem;
-            }
+      .card-header {
+        margin-bottom: 0.75rem;
+        border-bottom: 1px dashed var(--gray-light);
+        padding-bottom: 0.75rem;
+      }
 
-            .service-card h3 {
-                margin: 0;
-                font-size: 1.4rem;
-                font-family: 'Honk', sans-serif;
-                color: var(--accent-dark);
-                letter-spacing: 0.5px;
-            }
+      .service-card h3 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-family: "Honk", sans-serif;
+        color: var(--accent-dark);
+        letter-spacing: 0.5px;
+      }
 
-            .description {
-                font-size: 1rem;
-                color: var(--gray-dark);
-                margin-bottom: 1.25rem;
-                flex-grow: 1;
-                line-height: 1.5;
-            }
+      .description {
+        font-size: 1rem;
+        color: var(--gray-dark);
+        margin-bottom: 1.25rem;
+        flex-grow: 1;
+        line-height: 1.5;
+      }
 
-            .port-info {
-                font-size: 0.85rem;
-                color: var(--gray);
-                margin-bottom: 1rem;
-                font-style: italic;
-            }
+      .port-info {
+        font-size: 0.85rem;
+        color: var(--gray);
+        margin-bottom: 1rem;
+        font-style: italic;
+      }
 
-            .links-container {
-                display: flex;
-                gap: 0.75rem;
-                flex-wrap: wrap;
-                margin-top: auto;
-            }
+      .links-container {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: auto;
+      }
 
-            .link-btn {
-                text-decoration: none;
-                padding: 0.6rem 1.2rem;
-                border-radius: 3px;
-                font-size: 0.95rem;
-                font-family: 'Lugrasimo', cursive;
-                transition: all 0.2s;
-                flex: 1;
-                text-align: center;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 6px;
-                border: 2px solid transparent;
-            }
+      .link-btn {
+        text-decoration: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 3px;
+        font-size: 0.95rem;
+        font-family: "Lugrasimo", cursive;
+        transition: all 0.2s;
+        flex: 1;
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border: 2px solid transparent;
+      }
 
-            .link-local {
-                background-color: transparent;
-                color: var(--accent-dark);
-                border: 2px solid var(--gray-light);
-            }
+      .link-local {
+        background-color: transparent;
+        color: var(--accent-dark);
+        border: 2px solid var(--gray-light);
+      }
 
-            .link-local:hover {
-                background-color: var(--gray-light);
-                border-color: var(--gray);
-            }
+      .link-local:hover {
+        background-color: var(--gray-light);
+        border-color: var(--gray);
+      }
 
-            .link-public {
-                background-color: var(--accent);
-                color: #fff;
-                border: 2px solid var(--accent);
-            }
+      .link-public {
+        background-color: var(--accent);
+        color: #fff;
+        border: 2px solid var(--accent);
+      }
 
-            .link-public:hover {
-                background-color: var(--accent-dark);
-                border-color: var(--accent-dark);
-            }
+      .link-public:hover {
+        background-color: var(--accent-dark);
+        border-color: var(--accent-dark);
+      }
 
-            .icon {
-                font-style: normal;
-                font-size: 1.1em;
-            }
+      .icon {
+        font-style: normal;
+        font-size: 1.1em;
+      }
 
-            @media (max-width: 720px) {
-                .services-grid {
-                    grid-template-columns: 1fr;
-                }
+      @media (max-width: 720px) {
+        .services-grid {
+          grid-template-columns: 1fr;
+        }
 
-                .page-header h1 {
-                    font-size: 2.2rem;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <Header />
-        <main>
-            <div class="page-header">
-                <h1>Services Dashboard</h1>
-                <p>Status and access points for the server ecosystem.</p>
+        .page-header h1 {
+          font-size: 2.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="page-header">
+        <h1>Services Dashboard</h1>
+        <p>Status and access points for the server ecosystem.</p>
+      </div>
+
+      <div class="services-grid">
+        {
+          services.map((service) => (
+            <div class="service-card">
+              <div class="card-header">
+                <h3>{service.name}</h3>
+              </div>
+              <p class="description">{service.description}</p>
+              {service.localPort && (
+                <p class="port-info">Port: {service.localPort}</p>
+              )}
+
+              <div class="links-container">
+                {service.localPort && (
+                  <a
+                    class="link-btn link-local"
+                    href={`${serverIp}:${service.localPort}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`Local Access: ${serverIp}:${service.localPort}`}
+                  >
+                    <span class="icon">🏠</span> Local
+                  </a>
+                )}
+
+                {service.domain && (
+                  <a
+                    class="link-btn link-public"
+                    href={`https://${service.domain}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`Public Access: ${service.domain}`}
+                  >
+                    <span class="icon">🌐</span> Public
+                  </a>
+                )}
+              </div>
             </div>
-
-            <div class="services-grid">
-                {
-                    services.map((service) => (
-                        <div class="service-card">
-                            <div class="card-header">
-                                <h3>{service.name}</h3>
-                            </div>
-                            <p class="description">{service.description}</p>
-                            {service.localPort && (
-                                <p class="port-info">Port: {service.localPort}</p>
-                            )}
-
-                            <div class="links-container">
-                                {service.localPort && (
-                                    <a
-                                        class="link-btn link-local"
-                                        href={`${serverIp}:${service.localPort}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        title={`Local Access: ${serverIp}:${service.localPort}`}
-                                    >
-                                        <span class="icon">🏠</span> Local
-                                    </a>
-                                )}
-
-                                {service.domain && (
-                                    <a
-                                        class="link-btn link-public"
-                                        href={`https://${service.domain}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        title={`Public Access: ${service.domain}`}
-                                    >
-                                        <span class="icon">🌐</span> Public
-                                    </a>
-                                )}
-                            </div>
-                        </div>
-                    ))
-                }
-            </div>
-        </main>
-        <Footer />
-    </body>
+          ))
+        }
+      </div>
+    </main>
+    <Footer />
+  </body>
 </html>
