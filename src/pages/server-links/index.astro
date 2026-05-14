@@ -17,6 +17,18 @@ interface Service {
 // Mapped from your Docker PS, Nginx Config, and Cloudflare DNS
 const services: Service[] = [
   {
+    name: "PDF Tools",
+    localPort: 3333,
+    domain: "pdftools.ordotech.space",
+    description: "PDF tools",
+  },
+  {
+    name: "Debate AI",
+    localPort: 3002,
+    domain: "debate-ai.ordotech.space",
+    description: "Debate training with AI",
+  },
+  {
     name: "Astro Site",
     localPort: 4690,
     domain: "astro.ordotech.space",
@@ -124,12 +136,6 @@ const services: Service[] = [
     localPort: 8000,
     domain: "mydeploy.ordotech.space",
     description: "Self-hosting Platform",
-  },
-  {
-    name: "PDF Tools",
-    localPort: 8084,
-    domain: "pdftools.ordotech.space",
-    description: "PDF tools",
   },
 ];
 ---
