@@ -17,6 +17,18 @@ interface Service {
 // Mapped from your Docker PS, Nginx Config, and Cloudflare DNS
 const services: Service[] = [
   {
+    name: "Nginx Proxy Manager",
+    localPort: 81,
+    domain: "npm.ordotech.space",
+    description: "Reverse Proxy Management",
+  },
+  {
+    name: "Scrollkeeper",
+    localPort: 7848,
+    domain: "scrollkeeper.ordotech.space",
+    description: "A easy place to write texts",
+  },
+  {
     name: "PDF Tools",
     localPort: 3333,
     domain: "pdftools.ordotech.space",
@@ -34,12 +46,7 @@ const services: Service[] = [
     domain: "astro.ordotech.space",
     description: "Marcelo Blog",
   },
-  {
-    name: "Nginx Proxy Manager",
-    localPort: 81,
-    domain: "npm.ordotech.space",
-    description: "Reverse Proxy Management",
-  },
+
   {
     name: "Pi-hole",
     localPort: 80, // Standard web port
